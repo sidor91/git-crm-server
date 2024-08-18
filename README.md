@@ -26,7 +26,7 @@
 
 ```bash
 git clone https://github.com/sidor91/git-crm-server.git
-cd repository
+cd git-crm-server
 ```
 
 ## Installation
