@@ -12,7 +12,7 @@ import { CreateProjectDto, CreateProjectResponseDto } from './dto/create-project
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { GetCurrentUserId } from 'src/@decorators/getCurrentUserId.decorator';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RemoveProjectResponseDto } from './dto/delete-project.dto';
+import { CommonResponseDto } from 'src/common/dto/common.dto';
 
 @ApiTags('Projects API')
 @Controller('project')
@@ -70,7 +70,7 @@ export class ProjectController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete project by id' })
   @ApiResponse({
-    type: RemoveProjectResponseDto,
+    type: CommonResponseDto,
   })
   remove(@Param('id') projectId: string, @GetCurrentUserId() userId: string) {
     return this.projectService.remove(projectId, userId);

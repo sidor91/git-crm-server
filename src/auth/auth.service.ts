@@ -67,4 +67,19 @@ export class AuthService {
 
     return { access_token };
   }
+
+  async logout(userId: string) {
+    const user = await this.userService.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new BadRequestException(
+        `Such user is not exists`,
+      );
+    }
+
+    delete user.access_token;
+
+    await this.userService.create(user);
+
+    return {success: true}
+  }
 }
