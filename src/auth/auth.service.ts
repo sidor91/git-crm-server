@@ -76,7 +76,7 @@ export class AuthService {
       );
     }
 
-    delete user.access_token;
+    user.access_token = '';
 
     await this.userService.create(user);
 
