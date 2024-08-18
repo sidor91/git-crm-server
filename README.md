@@ -32,6 +32,8 @@
 $ npm install
 ```
 
+## Сreating .env file with variables listed in .env.example
+
 ## Running the app
 
 ```bash
