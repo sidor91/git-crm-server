@@ -1,26 +1,70 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { AuthUserDto } from './dto/auth-user.dto';
+import { UserService } from 'src/user/user.service';
+import { User } from 'src/user/entities/user.entity';
+import { JwtTokenService } from 'src/jwt-token/jwt-token.service';
+import { CryptoService } from 'src/crypto/crypto.service';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtTokenService: JwtTokenService,
+    private readonly cryptoService: CryptoService,
+  ) {}
+
+  async validateUser(payload: {
+    id: string;
+    email: string;
+    access_token: string;
+  }): Promise<User | undefined> {
+    return await this.userService.findOne({ where: payload });
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async register(dto: AuthUserDto) {
+    const hashedPassword = await this.cryptoService.hashPassword(dto.password);
+    const user = await this.userService.findOne({ where: { email: dto.email } });
+
+    if (user) {
+      throw new BadRequestException(`The user with email ${dto.email} is already exists`)
+    }
+
+    const newUser = await this.userService.create({
+      ...dto,
+      password: hashedPassword,
+    });
+
+    return await this.generateAccessToken({
+      email: newUser.email,
+      id: newUser.id,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  async login(dto: AuthUserDto) {
+    const user = await this.userService.findOne({
+      where: { email: dto.email },
+    });
+
+    const isValidPassword = await this.cryptoService.validatePassword(
+      dto.password,
+      user.password,
+    );
+    if (!user || !isValidPassword) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return await this.generateAccessToken({
+      email: user.email,
+      id: user.id,
+    });
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+  async generateAccessToken(payload: { id: string; email: string }) {
+    const access_token =
+      await this.jwtTokenService.generateAccessToken(payload);
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    await this.userService.update({ email: payload.email, access_token });
+
+    return { access_token };
   }
 }
