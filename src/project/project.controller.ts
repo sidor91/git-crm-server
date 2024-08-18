@@ -11,7 +11,7 @@ import { ProjectService } from './project.service';
 import { CreateProjectDto, CreateProjectResponseDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { GetCurrentUserId } from 'src/@decorators/getCurrentUserId.decorator';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RemoveProjectResponseDto } from './dto/delete-project.dto';
 
 @ApiTags('Projects API')
@@ -20,6 +20,7 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Post('/create')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new project' })
   @ApiResponse({
     type: CreateProjectResponseDto,
@@ -29,6 +30,7 @@ export class ProjectController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'List all projects of current user' })
   @ApiResponse({
     type: [CreateProjectResponseDto],
@@ -38,6 +40,7 @@ export class ProjectController {
   }
 
   @Get(':projectId')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get project by id' })
   @ApiResponse({
     type: CreateProjectResponseDto,
@@ -50,6 +53,7 @@ export class ProjectController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update project by id' })
   @ApiResponse({
     type: CreateProjectResponseDto,
@@ -63,6 +67,7 @@ export class ProjectController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete project by id' })
   @ApiResponse({
     type: RemoveProjectResponseDto,
