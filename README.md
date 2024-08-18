@@ -22,9 +22,12 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Clone the Repository
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+```bash
+git clone https://github.com/sidor91/git-crm-server.git
+cd repository
+```
 
 ## Installation
 
