@@ -4,22 +4,22 @@
 
 This is a server-side application built with Nest.js, TypeScript, and PostgreSQL. It serves REST API to provide users with the interface for maintaining Git repositories.
 
-## Clone the Repository
+## 1. Clone the Repository
 
 ```bash
 git clone https://github.com/sidor91/git-crm-server.git
 cd git-crm-server
 ```
 
-## Installation
+## 2. Installation
 
 ```bash
 $ npm install
 ```
 
-## Сreating .env file with variables listed in .env.example
+## 3. Сreating .env file with variables listed in .env.example
 
-## Running the app
+## 4. Running the app
 
 ```bash
 # development
