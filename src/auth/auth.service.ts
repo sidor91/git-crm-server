@@ -45,12 +45,17 @@ export class AuthService {
       where: { email: dto.email },
     });
 
+    if (!user) {
+      throw new UnauthorizedException(`User with email ${dto.email} doesn't exists`);
+    }
+
     const isValidPassword = await this.cryptoService.validatePassword(
       dto.password,
       user.password,
     );
-    if (!user || !isValidPassword) {
-      throw new UnauthorizedException('Invalid credentials');
+
+    if (!isValidPassword) {
+      throw new UnauthorizedException('Invalid password');
     }
 
     return await this.generateAccessToken({
